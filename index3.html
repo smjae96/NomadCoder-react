@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <div id="root"></div>
+</body>
+<script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<script type="text/babel">
+    function Btn({text, changeValue}) {
+        console.log(text, "was rendered")
+        return <button 
+            onClick={changeValue}
+            style={{
+            backgroundColor:"tomato",
+            color: "white",
+            padding: "10px 20px",
+            border: 0,
+            borderRadius : 10,
+            
+        }}>{text}</button>
+    }
+    // MemorizedBtn은 Btn 컴포넌트의 Memorized된 버젼이다.
+    const MemorizedBtn = React.memo(Btn);
+    function App() {
+        const [value, setValue] = React.useState("Save Changes")
+        const changeValue = () => {
+            setValue("Revert Changes")
+        }
+        return (
+            // 내가 커스텀한 컴포넌트 태그에 넣는 onClick은 이벤트리스너를 추가시키는 것이 아니라 prop의 이름일 뿐이다.  
+            
+            // 우리는 만약 해당 컴포넌트의 props가 변경되지 않는다면 그 컴포넌트를 다시 그릴지 아닐지를 결정할 수 있다.
+            // 이것을 React-memo라고 한다
+            <div>       
+                <MemorizedBtn text={value} changeValue={changeValue} />
+                <MemorizedBtn text="Continue" />
+            </div>
+        );
+    }
+    const root = document.getElementById("root")
+    ReactDOM.render(<App />, root);
+</script>
+
+</html>
